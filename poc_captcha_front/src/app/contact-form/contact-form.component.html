@@ -1,0 +1,83 @@
+<div class="contact-container">
+  <h1>Formulaire de contact</h1>
+  <p class="subtitle">POC – Intégration Friendly Captcha</p>
+
+  @if (status === "success") {
+    <div class="alert alert-success">
+      Votre message a bien été envoyé. Merci !
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="field">
+        <label for="name">Nom</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          placeholder="Votre nom"
+          [class.invalid]="isFieldInvalid('name')"
+        />
+        @if (isFieldInvalid("name")) {
+          <span class="error-hint"
+            >Le nom est requis (2 caractères minimum).</span
+          >
+        }
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          placeholder="votre@email.fr"
+          [class.invalid]="isFieldInvalid('email')"
+        />
+        @if (isFieldInvalid("email")) {
+          <span class="error-hint">Adresse email invalide.</span>
+        }
+      </div>
+
+      <div class="field">
+        <label for="message">Message</label>
+        <textarea
+          id="message"
+          formControlName="message"
+          placeholder="Votre message (10 caractères minimum)"
+          rows="5"
+          [class.invalid]="isFieldInvalid('message')"
+        ></textarea>
+        @if (isFieldInvalid("message")) {
+          <span class="error-hint"
+            >Le message est requis (10 caractères minimum).</span
+          >
+        }
+      </div>
+
+      <div class="field captcha-field">
+        <div #captchaContainer></div>
+        @if (status === "captcha-missing") {
+          <span class="error-hint"
+            >Veuillez attendre la validation du captcha.</span
+          >
+        }
+      </div>
+
+      @if (status === "error") {
+        <div class="alert alert-error">{{ errorMessage }}</div>
+      }
+
+      <button
+        type="submit"
+        [disabled]="status === 'loading'"
+        class="submit-btn"
+      >
+        @if (status === "loading") {
+          Envoi en cours…
+        } @else {
+          Envoyer
+        }
+      </button>
+    </form>
+  }
+</div>
