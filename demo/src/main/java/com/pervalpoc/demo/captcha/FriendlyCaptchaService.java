@@ -20,13 +20,17 @@ public class FriendlyCaptchaService {
 
     public FriendlyCaptchaService(
             FriendlyCaptchaProperties properties,
-            @Value("${app.proxy.host}") String proxyHost,
-            @Value("${app.proxy.port}") int proxyPort) {
+            @Value("${app.proxy.host:}") String proxyHost,
+            @Value("${app.proxy.port:0}") int proxyPort) {
         this.properties = properties;
 
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)));
-        this.restClient = RestClient.builder().requestFactory(factory).build();
+        if (!proxyHost.isBlank()) {
+            SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+            factory.setProxy(new Proxy(Proxy.Type.HTTP, new InetSocketAddress(proxyHost, proxyPort)));
+            this.restClient = RestClient.builder().requestFactory(factory).build();
+        } else {
+            this.restClient = RestClient.create();
+        }
     }
 
     public boolean verify(String captchaResponse) {
