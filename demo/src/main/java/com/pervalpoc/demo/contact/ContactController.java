@@ -22,15 +22,15 @@ public class ContactController {
     }
 
     @PostMapping
-    public ResponseEntity<String> submitContact(@RequestBody ContactRequest request) {
+    public ResponseEntity<Void> submitContact(@RequestBody ContactRequest request) {
         boolean captchaValid = friendlyCaptchaService.verify(request.getCaptchaResponse());
 
         if (!captchaValid) {
             log.warn("Friendly Captcha validation failed for request from {}", request.getEmail());
-            return ResponseEntity.badRequest().body("Captcha invalide ou absent");
+            return ResponseEntity.badRequest().build();
         }
 
         log.info("Contact form accepted for {}", request.getEmail());
-        return ResponseEntity.ok("Message reçu");
+        return ResponseEntity.ok().build();
     }
 }
