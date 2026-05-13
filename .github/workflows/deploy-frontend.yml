@@ -20,7 +20,7 @@ jobs:
       - name: Install & build
         working-directory: poc_captcha_front
         run: |
-          npm ci
+          npm install
           npx ng build --configuration production --base-href /poc_perval/
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
